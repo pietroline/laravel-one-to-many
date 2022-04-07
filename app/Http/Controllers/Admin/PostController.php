@@ -30,7 +30,7 @@ class PostController extends Controller
     {
         return view("admin.posts.create");
     }
-
+ 
     /**
      * Store a newly created resource in storage.
      *
