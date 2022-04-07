@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
-use App\Post;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ValidationPost;
+use App\Http\Requests\ValidationCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,9 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $posts = Post::all();
-        return view("admin.posts.index", compact("posts"));
+    {   
+        $categories = Category::all();
+        return view("admin.categories.index", compact("categories"));
     }
 
     /**
@@ -29,8 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view("admin.posts.create", compact("categories"));
+        return view("admin.categories.create");
     }
 
     /**
@@ -39,12 +37,11 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ValidationPost $request)
+    public function store(ValidationCategory $request)
     {
         // $request->validate(
         //     [
-        //         'title' => 'required|min:5',
-        //         'content' => 'required|min:10',
+        //         "name" => "required | min:2"
         //     ]
         // );
 
@@ -53,21 +50,22 @@ class PostController extends Controller
         // creo slug univoco, nel caso in cui il nuovo è già presente nel database ne creo uno diverso, concatenandolo ad un couter
         // Prova-nuovo-post 
         // Prova-nuovo-post-1
-        $slug = Str::slug($data['title']);
+        $slug = Str::slug($data['name']);
 
         $counter = 1;
-        while (Post::where('slug', $slug)->first()) {
-            $slug = Str::slug($data['title']) . '-' . $counter;
+        while (Category::where('slug', $slug)->first()) {
+            $slug = Str::slug($data['name']) . '-' . $counter;
             $counter++;
         }
 
         $data['slug'] = $slug;
 
-        $post = new Post();
+        $post = new Category();
         $post->fill($data);
         $post->save();
 
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.categories.index');
+
     }
 
     /**
@@ -76,9 +74,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Category $category)
     {
-        return view("admin.posts.show", compact("post"));
+        return view("admin.categories.show", compact("category"));
     }
 
     /**
@@ -87,10 +85,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Category $category)
     {
-        $categories = Category::all();
-        return view("admin.posts.edit", compact("post", "categories"));
+        return view("admin.categories.edit", compact("category"));
     }
 
     /**
@@ -100,12 +97,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ValidationPost $request, Post $post)
+    public function update(ValidationCategory $request, Category $category)
     {
         // $request->validate(
         //     [
-        //         'title' => 'required|min:5',
-        //         'content' => 'required|min:10',
+        //         "name" => "required | min:2"
         //     ]
         // );
 
@@ -114,22 +110,21 @@ class PostController extends Controller
         // creo slug univoco, nel caso in cui il nuovo è già presente nel database ne creo uno diverso, concatenandolo ad un couter
         // Prova-nuovo-post 
         // Prova-nuovo-post-1
-        $slug = Str::slug($data['title']);
+        $slug = Str::slug($data['name']);
 
-        //solo se il nuovo slug è diverso da quello che c'era prima ne crei uno nuovo diverso da quelli presenti sul database
-        if($post->slug != $slug){ 
+        if($category->slug != $slug){ 
             $counter = 1;
-            while (Post::where('slug', $slug)->first()) {
-                $slug = Str::slug($data['title']) . '-' . $counter;
+            while (Category::where('slug', $slug)->first()) {
+                $slug = Str::slug($data['name']) . '-' . $counter;
                 $counter++;
-            }    
+            }
             $data['slug'] = $slug;
         }
 
-        $post->update($data);
-        $post->save();
+        $category->fill($data);
+        $category->save();
 
-        return redirect()->route("admin.posts.index");
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -138,10 +133,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Category $category)
     {
-        $post->delete();
+        $category->delete();
 
-        return redirect()->route("admin.posts.index");
+        return redirect()->route("admin.categories.index");
     }
 }

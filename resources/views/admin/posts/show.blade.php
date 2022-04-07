@@ -15,6 +15,11 @@
             <li>
                 <strong>Slug: </strong> {{$post->slug}}
             </li>
+            <li>
+                <strong>Categoria: </strong> {{$post->category->name}}
+            </li>
+
+            
         </ul>
 
 
