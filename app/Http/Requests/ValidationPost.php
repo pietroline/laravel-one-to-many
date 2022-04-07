@@ -29,4 +29,19 @@ class ValidationPost extends FormRequest
             'content' => 'required|min:10',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'title' => 'Titolo',
+            'content' => 'Contenuto del post',
+        ];
+
+    }
+
 }
