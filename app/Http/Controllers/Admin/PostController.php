@@ -30,7 +30,7 @@ class PostController extends Controller
     {
         return view("admin.posts.create");
     }
- 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -85,9 +85,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view("admin.posts.edit", compact("post"));
     }
 
     /**
@@ -97,9 +97,36 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ValidationPost $request, Post $post)
     {
-        //
+        // $request->validate(
+        //     [
+        //         'title' => 'required|min:5',
+        //         'content' => 'required|min:10',
+        //     ]
+        // );
+
+        $data = $request->all();
+
+        // creo slug univoco, nel caso in cui il nuovo è già presente nel database ne creo uno diverso, concatenandolo ad un couter
+        // Prova-nuovo-post 
+        // Prova-nuovo-post-1
+        $slug = Str::slug($data['title']);
+
+        //solo se il nuovo slug è diverso da quello che c'era prima ne crei uno nuovo diverso da quelli presenti sul database
+        if($post->slug != $slug){ 
+            $counter = 1;
+            while (Post::where('slug', $slug)->first()) {
+                $slug = Str::slug($data['title']) . '-' . $counter;
+                $counter++;
+            }    
+            $data['slug'] = $slug;
+        }
+
+        $post->update($data);
+        $post->save();
+
+        return redirect()->route("admin.posts.index");
     }
 
     /**
@@ -108,8 +135,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route("admin.posts.index");
     }
 }

@@ -9,17 +9,6 @@
 
                     <div class="card-body">
 
-                        {{-- errori dovuti alla validazione nei form --}}
-                        @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
                         Ciao, {{$user->name}} #{{$user->id}}
                     </div>
                 </div>
