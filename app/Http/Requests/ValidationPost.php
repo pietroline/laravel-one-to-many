@@ -27,6 +27,7 @@ class ValidationPost extends FormRequest
         return [
             'title' => 'required|min:5',
             'content' => 'required|min:10',
+            'category_id' => 'nullable|exists:categories,id'
         ];
     }
 
