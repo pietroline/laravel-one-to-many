@@ -16,7 +16,7 @@
                 <strong>Slug: </strong> {{$post->slug}}
             </li>
             <li>
-                <strong>Categoria: </strong> {{$post->category->name}}
+                <strong>Categoria: </strong> {{isset($post->category) ? $post->category->name : "NULL"}}
             </li>
 
             

@@ -25,18 +25,17 @@
                               
                                 <td class="d-flex">
                                     <a href="{{route('admin.categories.show', $category->id)}}" class="btn btn-primary">Vedi</a>
+                                
+                                    <a href="{{route('admin.categories.edit', $category->id)}}" class="btn btn-warning mx-2">Modifica</a>
 
-                                    @if ($category->id > 1)
-                                        <a href="{{route('admin.categories.edit', $category->id)}}" class="btn btn-warning mx-2">Modifica</a>
+                                    <form method="POST" action="{{route('admin.categories.destroy', $category->id)}}">
 
-                                        <form method="POST" action="{{route('admin.categories.destroy', $category->id)}}">
+                                        @csrf
+                                        @method("DELETE")
 
-                                            @csrf
-                                            @method("DELETE")
-
-                                            <button class="btn btn-danger">Elimina</button>
-                                        </form>
-                                    @endif
+                                        <button class="btn btn-danger">Elimina</button>
+                                    </form>
+                                   
                                     
                                 </td>
                             </tr>                            
